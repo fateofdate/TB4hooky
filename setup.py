@@ -13,7 +13,7 @@ with open("README.MD", 'r', encoding='utf-8') as des:
 
 setuptools.setup(
     name='TB4hooky',
-    version='0.1.5',
+    version='0.1.6',
     author='Fake77',
     author_email="yankail520@gmail.com",
     description='Python hook framework support Local hook and Remote hook',
