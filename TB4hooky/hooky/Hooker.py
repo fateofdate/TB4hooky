@@ -8,16 +8,14 @@ LOGGER = True
 from TB4hooky.netLoader.AdapterConnectionRemote import AdapterConnectionRemote as ConnectionRemote
 from abc import ABCMeta, abstractmethod
 from TB4hooky.typeInspect.Inspect import Inspect
-
-
 from loguru import logger
 
 DEFAULT_CACHE_COUNT = 64
 
+
 def unable_logger():
     global LOGGER
     LOGGER = False
-
 
 
 class MetaCodeHooker(metaclass=ABCMeta):
@@ -48,6 +46,7 @@ class BaseCodeHooker(object):
         self._cache = None
         # 缓存计数器
         self._cache_count = None
+        # 当前被hook的函数
         # remote func argument
         self.arg = args
         self.kwarg = kwargs
@@ -143,14 +142,28 @@ class CodeHooker(BaseCodeHooker):
     def serialize_func(self, count: int) -> str:
         return self._serialize_func(count)
 
+    def _set_cache(self, serialize: dict):
+        for key in serialize.keys():
+            value = serialize[key]
+            if key == "cache_count":
+                self._cache_count = int(value)
+            if key in ("co_lnotab", "co_codestring"):
+                value = base64.b64decode(value.encode())
+            if key in ("co_argcount", "co_kwonlyargcount", "co_nlocals",
+                       "co_stacksize", "co_flags", "co_firstlineno"):
+                value = int(value)
+            if key in ("co_consts", "co_names", "co_varnames", "co_freevars"):
+                value = tuple(value)
+            self._cache[key] = value
+
     def swap_remote_code_info(self, host, *args, **kwargs):
         self._swap_remote_code_info(host)
 
     def _swap_remote_code_info(self, host, *args, **kwargs):
         Inspect.check_string_type(host)
         if not self._cache_count:
-            # remote cache
 
+            # remote cache
             with ConnectionRemote() as conn:
                 remote_content = conn.get_remote_f(host, *args, **kwargs)
 
@@ -159,22 +172,10 @@ class CodeHooker(BaseCodeHooker):
                 raise Exception(f"Remote code request Error status "
                                 f"code: {remote_content.status_code} remote host: {host}.")
             remote_content = remote_content.json()
-            # print(remote_content)
+
             # 取出RPC 填充 cache
             self._cache = {}
-            for key in remote_content.keys():
-                value = remote_content[key]
-                # print(key, value)
-                if key == "cache_count":
-                    self._cache_count = int(value)
-                if key in ("co_lnotab", "co_codestring"):
-                    value = base64.b64decode(value.encode())
-                if key in ("co_argcount", "co_kwonlyargcount", "co_nlocals",
-                           "co_stacksize", "co_flags", "co_firstlineno"):
-                    value = int(value)
-                if key in ("co_consts", "co_names", "co_varnames", "co_freevars"):
-                    value = tuple(value)
-                self._cache[key] = value
+            self._set_cache(remote_content)
             self._cache.pop("cache_count")
 
         self._cache_count -= 1
@@ -225,8 +226,9 @@ class InstanceCodeHooker(CodeHooker):
         return arg_recv
 
     def swap_remote_code_info(self, host, *args, **kwargs):
-        raise ("Error 'InstanceCodeHooker' "
+        raise NotImplemented("Error 'InstanceCodeHooker' "
                "not support remote hook should use 'CodeHooker'.")
 
     def _swap_remote_code_info(self, host, *args, **kwargs):
-        raise
+        raise NotImplemented("Error 'InstanceCodeHooker' "
+                             "not support remote hook should use 'CodeHooker'.")

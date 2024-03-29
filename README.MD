@@ -152,8 +152,6 @@
 ># 注册远程包导入服务器地址
 >register("http://127.0.0.1:9000")
 >
-># 安装钩子
->install_path_hook()
 >
 >"""
 > 客户端代码或者服务端代码
@@ -236,5 +234,7 @@
 >   * \- remote/local hook
 > * 29.03.2024 - v0.1.6
 >   * \- fix bug remote import 
+> * 29.03.2024 - v0.1.7
+>   * \- fix but remote import 
 ><hr>
 ### Create by Tuzi 

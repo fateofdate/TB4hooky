@@ -2,6 +2,7 @@ from importlib.abc import MetaPathFinder
 from TB4hooky.netLoader.SourceCodeManager import SourceCodeManager
 from TB4hooky.Utils.LinkDealer import LinksDealer
 from TB4hooky.netLoader.PackageLoader import RemotePackageLoader
+from TB4hooky.netLoader.ModuleLoader import RemoteModuleLoader
 
 
 class RemoteMetaFinder(MetaPathFinder):

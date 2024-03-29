@@ -4,9 +4,10 @@ from types import ModuleType
 
 class RemotePackageLoader(RemoteModuleLoader):
     def load_module(self, fullname: str) -> ModuleType:
-        mod = super().load_module(fullname)
+        mod = super(RemoteModuleLoader, self).load_module(fullname)
         mod.__path__ = [self._endpoint]
         mod.__package__ = fullname
+
         return mod
 
     def get_filename(self, fullname: str) -> str:
