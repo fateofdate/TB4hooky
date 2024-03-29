@@ -97,11 +97,9 @@
 >
 >app = Flask(__name__)
 >
-># 这里我们定义一个远程包导入服务器
->register_remote_pkg_server("http://127.0.0.1:9000")
+># 这里我们定义一个远程包导入服务器并且安装模块
+>register("http://127.0.0.1:9000")
 >
-># 安装远程导入模块
->install_path_hook()
 >
 ># 实现一个远程函数
 >
