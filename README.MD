@@ -93,7 +93,7 @@
 > ```python
 >from flask import Flask
 >from hooky.Hooker import CodeHooker
->from netLoader.DaynamicImport import >register_remote_pkg_server, install_path_hook, >remove_path_hook
+>from netLoader.DaynamicImport import register
 >
 >app = Flask(__name__)
 >
