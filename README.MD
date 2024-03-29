@@ -146,9 +146,8 @@
 >```python
 ># 方式一
 >from netLoader.DaynamicImport import(   
->   register_remote_pkg_server, 
->   install_path_hook,
->   remove_path_hook)
+>   register,   
+> )
 >
 ># 注册远程包导入服务器地址
 >register("http://127.0.0.1:9000")
