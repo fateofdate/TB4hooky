@@ -1,4 +1,4 @@
-from netLoader.RemoteControl import ConnectionRemote, ConnectionRemotePackage
+from TB4hooky.netLoader.RemoteControl import ConnectionRemote, ConnectionRemotePackage
 
 
 class AdapterConnectionRemote(ConnectionRemote):

@@ -1,5 +1,4 @@
 import requests
-import types
 
 
 class BaseConnection(object):
@@ -47,6 +46,7 @@ class ConnectionRemotePackage(BaseConnection):
 
     def __enter__(self):
         self._session = requests.Session()
+        return self
 
     def __exit__(self, exc_type, exc_val, *args, **kwargs):
         self._session.close()

@@ -2,14 +2,22 @@ import base64
 import json
 import sys
 import types
-from setting import (
-    LOGGER,
-)
-from netLoader.AdapterConnectionRemote import AdapterConnectionRemote as ConnectionRemote
+
+LOGGER = True
+
+from TB4hooky.netLoader.AdapterConnectionRemote import AdapterConnectionRemote as ConnectionRemote
 from abc import ABCMeta, abstractmethod
-from typeInspect.Inspect import Inspect
-if LOGGER:
-    from loguru import logger
+from TB4hooky.typeInspect.Inspect import Inspect
+
+
+from loguru import logger
+
+DEFAULT_CACHE_COUNT = 64
+
+def unable_logger():
+    global LOGGER
+    LOGGER = False
+
 
 
 class MetaCodeHooker(metaclass=ABCMeta):
@@ -87,14 +95,7 @@ class BaseCodeHooker(object):
 class CodeHooker(BaseCodeHooker):
     def __init__(self, _f, remote: bool = None):
         if remote:
-            try:
-                from setting import (
-                    DEFAULT_CACHE_COUNT,
-                )
-                self._cache_count = DEFAULT_CACHE_COUNT
-            except (ModuleNotFoundError, ImportError) as _:
-                pass
-
+            self._cache_count = DEFAULT_CACHE_COUNT
         super().__init__(_f, remote)
 
     def __call__(self, func):
@@ -102,13 +103,13 @@ class CodeHooker(BaseCodeHooker):
 
         def arg_recv(*args, **kwargs):
             if not self._remote:
-                if logger:
+                if LOGGER:
                     logger.success(f"Hook mod [Local], Local function"
                                    f" from [{self._f.__name__}] to Hook object [{self._hook_obj.__name__}]")
 
                 self.swap_code_info()
             else:
-                if logger:
+                if LOGGER:
                     logger.success(f"Hook mod [Remote], Remote code "
                                    f"from host [{self._f}] to Hook object [{self._hook_obj.__name__}]")
 
