@@ -27,12 +27,12 @@ def remote_import(_pkg: str):
         loop = asyncio.get_event_loop()
         links = LinksDealer.get_link(_endpoint)
         for link in links:
-            if link.startswith(_pkg):
+            if link.startswith(_pkg.split('.')[0]):
                 logger.success(f"Find pkg {link.replace('/', '')}!")
                 FileHandle(_endpoint, link, loop).start_remote_import()
                 time.sleep(0.2)
         print(FileHandle.get_install_path())
-        sys.path.append(FileHandle.get_install_path() + '\\' +_pkg)
+        sys.path.append(FileHandle.get_install_path() + '\\' + _pkg.split('.')[0])
         pkg = importlib.import_module(_pkg)
         return pkg
 
