@@ -7,7 +7,7 @@ class BaseConnection(object):
     def __enter__(self):
         raise NotImplementedError("Subclasses must implement __enter__")
 
-    def __exit__(self, exc_type, exc_val,*args, **kwargs):
+    def __exit__(self, exc_type, exc_val, *args, **kwargs):
         raise NotImplementedError("Subclasses must implement __exit__")
 
     def get_remote_f(self, remote_addr, *args, **kwargs):

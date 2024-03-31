@@ -8,6 +8,7 @@ LOGGER = True
 from TB4hooky.netLoader.AdapterConnectionRemote import AdapterConnectionRemote as ConnectionRemote
 from abc import ABCMeta, abstractmethod
 from TB4hooky.typeInspect.Inspect import Inspect
+from TB4hooky.hooky.CacheObject import Cache
 from loguru import logger
 
 DEFAULT_CACHE_COUNT = 64
@@ -147,38 +148,12 @@ class CodeHooker(BaseCodeHooker):
             value = serialize[key]
             if key == "cache_count":
                 self._cache_count = int(value)
-            if key in ("co_lnotab", "co_codestring"):
-                value = base64.b64decode(value.encode())
-            if key in ("co_argcount", "co_kwonlyargcount", "co_nlocals",
-                       "co_stacksize", "co_flags", "co_firstlineno"):
-                value = int(value)
-            if key in ("co_consts", "co_names", "co_varnames", "co_freevars"):
-                value = tuple(value)
             self._cache[key] = value
 
     def swap_remote_code_info(self, host, *args, **kwargs):
         self._swap_remote_code_info(host)
 
-    def _swap_remote_code_info(self, host, *args, **kwargs):
-        Inspect.check_string_type(host)
-        if not self._cache_count:
-
-            # remote cache
-            with ConnectionRemote() as conn:
-                remote_content = conn.get_remote_f(host, *args, **kwargs)
-
-            # 判断分发服务器是否在线
-            if 0 < (remote_content.status_code - 200) < 10:
-                raise Exception(f"Remote code request Error status "
-                                f"code: {remote_content.status_code} remote host: {host}.")
-            remote_content = remote_content.json()
-
-            # 取出RPC 填充 cache
-            self._cache = {}
-            self._set_cache(remote_content)
-            self._cache.pop("cache_count")
-
-        self._cache_count -= 1
+    def _set_hook_code(self):
         self._hook_obj.__code__ = types.CodeType(
             self._cache['co_argcount'],
             self._cache['co_kwonlyargcount'],
@@ -195,6 +170,28 @@ class CodeHooker(BaseCodeHooker):
             self._cache['co_lnotab'],
             self._cache['co_freevars']
         )
+
+    def _swap_remote_code_info(self, host, *args, **kwargs):
+        Inspect.check_string_type(host)
+        if not self._cache_count:
+
+            # remote cache
+            with ConnectionRemote() as conn:
+                remote_content = conn.get_remote_f(host, *args, **kwargs)
+
+            # 判断分发服务器是否在线
+            if 0 < (remote_content.status_code - 200) < 10:
+                raise Exception(f"Remote code request Error status "
+                                f"code: {remote_content.status_code} remote host: {host}.")
+            remote_content = remote_content.json()
+
+            # 取出RPC 填充 cache
+            self._cache = Cache()
+            self._set_cache(remote_content)
+            self._cache.pop("cache_count")
+
+        self._cache_count -= 1
+        self._set_hook_code()
 
 
 class InstanceCodeHooker(CodeHooker):
@@ -227,7 +224,7 @@ class InstanceCodeHooker(CodeHooker):
 
     def swap_remote_code_info(self, host, *args, **kwargs):
         raise NotImplemented("Error 'InstanceCodeHooker' "
-               "not support remote hook should use 'CodeHooker'.")
+                             "not support remote hook should use 'CodeHooker'.")
 
     def _swap_remote_code_info(self, host, *args, **kwargs):
         raise NotImplemented("Error 'InstanceCodeHooker' "

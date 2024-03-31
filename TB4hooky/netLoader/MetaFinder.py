@@ -46,7 +46,7 @@ class RemoteMetaFinder(MetaPathFinder):
             try:
                 loader.load_module(fullname)
                 self._nodes[child_location] = LinksDealer.get_link(child_location)
-            except ImportError as _:
+            except Exception as _:
                 loader = None
             return loader
         # 4. 处理module

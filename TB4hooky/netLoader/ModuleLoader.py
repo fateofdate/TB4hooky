@@ -7,7 +7,7 @@ from TB4hooky.netLoader.SourceCodeManager import SourceCodeManager
 
 
 class RemoteModuleLoader(SourceLoader):
-    def __init__(self, endpoint: str, source_code_manager: SourceCodeManager)-> None:
+    def __init__(self, endpoint: str, source_code_manager: SourceCodeManager) -> None:
         self._endpoint = endpoint
         self._source_code_manager = source_code_manager
 

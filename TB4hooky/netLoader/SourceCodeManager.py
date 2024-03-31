@@ -17,7 +17,14 @@ class SourceCodeManager:
         source = self._sources.get(filename)
         if not source:
             with ConnectionRemotePackage() as conn:
-                source = conn.get_remote_package(filename).text
+                session = conn.get_remote_package(filename)
+                if session.status_code == 200:
+                    source = session.text
+                    # print(filename)
+                else:
+                    # print(filename + 'i')
+                    session = conn.get_remote_package(filename + 'i')
+                    source = session.text
                 self._sources[filename] = source
         return source
 

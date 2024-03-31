@@ -10,6 +10,8 @@ import setuptools
 with open("README.MD", 'r', encoding='utf-8') as des:
     long_description = des.read()
 
+with open("requirements.txt", 'r', encoding='utf-8') as pkg:
+    pkgs = pkg.readline()
 
 setuptools.setup(
     name='TB4hooky',
@@ -21,16 +23,7 @@ setuptools.setup(
     long_description_content_type="text/markdown; charset=UTF-8;",
     url='https://github.com/fateofdate/TB4hooky',
     include_package_data=False,
-    install_requires=[
-        "requests==2.31.0",
-        "urllib3==1.26.6",
-        "loguru==0.7.2",
-        "win32-setctime==1.1.0",
-        "wincertstore==0.2",
-        "charset-normalizer==3.3.2",
-        "colorama==0.4.6",
-        "idna==3.6",
-    ],
+    install_requires=[pkg.replace("\n", '') for pkg in pkgs],
 
     packages=setuptools.find_packages(),
     classifiers=[

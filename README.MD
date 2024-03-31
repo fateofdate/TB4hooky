@@ -228,13 +228,35 @@
 >    hello
 >    world
 >```
+### 远程导入包
+> 由于python包导入机制过于复杂，导致在导入一些比较大的库的时候，```hook_meta```没法很好的兼容其导入方式，所以添加了辅助函数 ```remote_import ```,来尽量调和该问题可以尝试通过```try except```来捕捉相关异常然后通过
+> ```remote_import```来显示的导入该包,该函数接收一个字符串，在这之前需要进行注册```register```，如果在这之前没有注册则什么都不会执行.
+>
+> ```python
+> # 导入netLoader
+>  from TB4hooky.netLoader.DaynamicImport import register, remote_import, unload
+> # 注册包中心
+> register("http://127.0.0.1:9000")
+>
+> # 尝试导入
+> try:
+>   import torch
+> except Exception as _:
+> # 显示导入
+>   remote_import('torch')
+> # 卸载钩子
+> unload("http://127.0.0.1:9000") 
+>```
+
 >#### 更新日志
 > * 28.03.2024 - v0.1.5 - alpha
 >
 >   * \- remote/local hook
-> * 29.03.2024 - v0.1.6
+> * 29.03.2024 - v0.1.6a
 >   * \- fix bug remote import 
-> * 29.03.2024 - v0.1.7
->   * \- fix but remote import 
+> * 29.03.2024 - v0.1.7a
+>   * \- fix bug remote import 
+> * 01.04.2024 - v0.1.8a
+>   * \- add remote import API ```remote_import```
 ><hr>
 ### Create by Tuzi 
