@@ -1,5 +1,6 @@
 # TB4hooky
-![](https://img.shields.io/badge/python-v3.7.16-1E90FF.svg) ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/fateofdate/TB4hooky)
+![](https://img.shields.io/badge/python-v3.7.16-1E90FF.svg) ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/fateofdate/TB4hooky) ![GitHub Repo stars](https://img.shields.io/github/stars/fateofdate/TB4hooky) ![GitHub watchers](https://img.shields.io/github/watchers/fateofdate/TB4hooky) ![GitHub forks](https://img.shields.io/github/forks/fateofdate/TB4hooky)
+
 ### 简介
 > TB4hooky 是一个由python编写的代码hook框架，支持```remote hook```和```local hook``` 
 > 支持自定义序列化协议，支持远程导入包模块，开箱即用。
@@ -11,6 +12,26 @@
 >5. 量化交易，当多个交易机需要同步热更新控制机上的交易策略时可以通过```remote hook```机制实时运行新的策略。
 ### 安装
 ```pip install TB4hooky```
+### 动态导入原理
+>```mermaid
+>   graph TB
+>       BulitinImport(Builtin importer) --> |find| bReturn(return pkg)
+>   BulitinImport(Builtin importer) -.not find.-> frozenImport(Frozen importer)
+>   frozenImport(Frozen importer) --> |find| fReturn(return pkg)
+>   frozenImport(Frozen importer) -.not find.->CustomImporter(Custom Importer)
+>    CustomImporter(Custom Importer) ==req==> RemoteImportServer[Remote import server]
+>   RemoteImportServer[Remote import server] ==resp==> CustomImporter(Custom Importer) 
+>    CustomImporter(Custom Importer) --> |find| creturn(return pkg)
+>    CustomImporter(Custom Importer) -.not find.-> sysexcept(Sys.ExceptionGlobalHook)
+>   sysexcept(Sys.ExceptionGlobalHook) --> handle(Exception handle funcion)
+>   handle(Exception handle funcion) --> filehandle(FileHandle object)
+>   filehandle(FileHandle object) ==req==> RemoteImportServer[Remote import server]
+>   RemoteImportServer[Remote import server] ==resp==> filehandle(FileHandle object)
+>    filehandle(FileHandle object) ==resp==>handle(Exception handle funcion)
+>   handle(Exception handle funcion) --> |find| freturn(return pkg)
+>   handle(Exception handle funcion) -.not find.-> raiseImprotError(raise ImportError)
+> ```
+
 ### 快速入门
 > ```local hook```
 > 将本地实现函数的字节码替换到hook的函数中使其实现本地函数的功能  
