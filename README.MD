@@ -1,5 +1,6 @@
 # TB4hooky
-![](https://img.shields.io/badge/python-v3.7.16-1E90FF.svg) ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/fateofdate/TB4hooky) ![GitHub Repo stars](https://img.shields.io/github/stars/fateofdate/TB4hooky) ![GitHub watchers](https://img.shields.io/github/watchers/fateofdate/TB4hooky) ![GitHub forks](https://img.shields.io/github/forks/fateofdate/TB4hooky)
+![PyPI - Version](https://img.shields.io/pypi/v/TB4hooky)
+ ![](https://img.shields.io/badge/python-v3.7.16-1E90FF.svg) ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/fateofdate/TB4hooky) ![GitHub Repo stars](https://img.shields.io/github/stars/fateofdate/TB4hooky) ![GitHub watchers](https://img.shields.io/github/watchers/fateofdate/TB4hooky) ![GitHub forks](https://img.shields.io/github/forks/fateofdate/TB4hooky)
 
 ### 简介
 > TB4hooky 是一个由python编写的代码hook框架，支持```remote hook```和```local hook``` 
