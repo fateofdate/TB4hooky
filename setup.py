@@ -15,7 +15,7 @@ with open("requirements.txt", 'r', encoding='utf-8') as pkg:
 
 setuptools.setup(
     name='TB4hooky',
-    version='0.1.9',
+    version='0.1.10-alpha',
     author='Fake77',
     author_email="yankail520@gmail.com",
     description='Python hook framework support Local hook and Remote hook',

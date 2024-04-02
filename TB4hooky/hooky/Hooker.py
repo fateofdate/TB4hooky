@@ -11,7 +11,9 @@ from TB4hooky.typeInspect.Inspect import Inspect
 from TB4hooky.hooky.CacheObject import Cache
 from loguru import logger
 
+
 DEFAULT_CACHE_COUNT = 64
+
 
 
 def unable_logger():

@@ -7,6 +7,10 @@ coding: utf-8
 """
 from TB4hooky.netLoader.AdapterConnectionRemote import AdapterConnectionRemotePackage as ConnectionRemotePackage
 
+__all__ = [
+    "SourceCodeManager",
+]
+
 
 class SourceCodeManager:
     def __init__(self) -> None:

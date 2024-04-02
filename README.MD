@@ -208,6 +208,25 @@
 >
 ># 不过这种方式作者认为不够优雅还是建议使用第一种远程导入的模块.
 >```
+>### 远程端示例(v0.1.9a 支持)
+> ```python
+> from flask import Flask
+> from TB4hooky.hooky.Serialize import ServerSerialize, REMOTE_FUNCTION_MAPPING
+> app = Flask(__name__)
+> 
+> # 新增语法糖 v0.1.9a ServerSerialize, 
+> # 将会把函数对象注册到 REMOTE_FUNCTION_MAPPING 中
+> @ServerSerialize(count=3)
+> def add(a, b):
+>   return a + b
+>
+> @app.route("/add")
+> def get_add():
+>  # 可以直接在接口中直接返回以该函数名为键的值
+>   return REMOTE_FUNCTION_MAPPING['add']
+> 
+> app.run("127.0.0.1", port=8000, debug=True)
+>```
 >
 ### 本地实例方法HOOK
 > 上面我们用```local hook```hook 类方法，实例方法，静态方法，但是实现函数上我们用，静态函数，函数等进行的实现，现在我们将引入一个新的对象，```InstanceCodeHooker```来帮助我们进行实例方法实现hook对象的修改。
@@ -280,5 +299,7 @@
 > * 01.04.2024 - v0.1.8a
 >   * \- add remote import API ```remote_import```
 > * 01.04.2024 - v0.1.8b
+> * 02.04.2024 - v0.1.9a
+>   * add TB4hooky.hooky.Serialize.ServerSerialize 语法糖方便服务端的序列化
 ><hr>
 ### Create by Tuzi 
