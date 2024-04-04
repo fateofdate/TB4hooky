@@ -20,13 +20,14 @@ class ServerSerialize(object):
         self.count = count
 
     def __call__(self, func):
-        def recv_args(*args, **kwargs):
+        def recv_args():
             # func callable校验
             assert callable(func)
             func_serialize = CodeHooker.serialize_init(func)
             serialize_result = func_serialize.serialize_func(self.count)
-            result = func(*args, **kwargs)
+            if func.__name__ in REMOTE_FUNCTION_MAPPING:
+                return func
             REMOTE_FUNCTION_MAPPING[func.__name__] = serialize_result
-            return result
-        return recv_args
+            return func
+        return recv_args()
 

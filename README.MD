@@ -302,5 +302,9 @@
 > * 01.04.2024 - v0.1.8b
 > * 02.04.2024 - v0.1.9a
 >   * add TB4hooky.hooky.Serialize.ServerSerialize 语法糖方便服务端的序列化
+> * 03.04.2024 - v0.1.10a0
+>   * fix bug Serialize
+> * 04.04.2024 - v0.1.11
+>   * fix bug ServerSerialize
 ><hr>
 ### Create by Tuzi 
